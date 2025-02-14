@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payload Threat Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #ffcc00;
+        }
+        .btn-primary {
+            background-color: #ffcc00;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #e6b800;
+        }
+        #results {
+            margin-top: 20px;
+            display: none;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Payload Threat Detection</h2>
+        <p class="text-center">Analyze suspicious payloads for potential threats</p>
+        
+        <form id="payloadForm">
+            <div class="mb-3">
+                <label for="payload" class="form-label">Enter Payload</label>
+                <textarea class="form-control" id="payload" rows="5" placeholder="Paste your payload here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Analyze Payload</button>
+        </form>
+
+        <div id="results">
+            <h5>Analysis Results</h5>
+            <pre id="analysisResults"></pre>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('payloadForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            document.getElementById('results').style.display = 'none';
+
+            const payload = document.getElementById('payload').value;
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ payload })
+            });
+
+            const data = await response.json();
+            document.getElementById('analysisResults').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('results').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
